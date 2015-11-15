@@ -1,0 +1,14 @@
+{
+  "name": "twitter-node-client",
+  "description": "Twitter JS Client",
+  "version": "0.0.6",
+  "directories": {
+    "lib": "./lib"
+  },
+  "dependencies": {
+    "firebase": "^2.3.1",
+    "oauth": "*",
+    "qs": "*",
+    "twitter-node-client": "*"
+  }
+}
