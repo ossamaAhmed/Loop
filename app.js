@@ -47,6 +47,7 @@
     }
 
     var twitter = new Twitter(config);
+    var currentTime= "Sun Nov 15 00:00:00 +0000 2015";
 
     //ossama's part
 
@@ -64,9 +65,9 @@
         console.log("FINAL keyword to search "+ regex);
 
 
-        var news_source = "bargutitutti";
+        var news_source = "bousamraralph";
         console.log("---------------------------");
-        console.log("bargutitutti: \n");
+        console.log("bousamraralph: \n");
         params = {screen_name: news_source, count: '50', exclude_replies: 'true'};
         twitter.getUserTimeline(params, error, function(timeline){
         timeline = JSON.parse(timeline);
@@ -92,11 +93,14 @@
                 author: news_source,
                 date_creation: timeline[i].created_at
             });
+            if(compareTimes(timeline[i].created_at,currentTime)==0){
+                            currentTime= timeline[i].created_at;
+            }
             console.log(tweet_lower_case);
             }
         });
 
-        console.log("Database populated by bargutitutti news");
+        console.log("Database populated by bousamraralph news");
 
         //   var news_source = "Reuters";
         // console.log("---------------------------");
@@ -138,9 +142,9 @@
 
         for(k=0;k<tasksList.length;k++){
             var currentElement= tasksList[k];
-               var news_source = "bargutitutti";
+               var news_source = "bousamraralph";
         console.log("---------------------------");
-        console.log("bargutitutti: \n");
+        console.log("bousamraralph: \n");
         params = {screen_name: news_source, count: '50', exclude_replies: 'true'};
         twitter.getUserTimeline(params, error, function(timeline){
         timeline = JSON.parse(timeline);
@@ -161,36 +165,82 @@
             for(j=0;j<100000;j++){
 
             }
-            // checkIfTweetExists(tweet_lower_case);
-            tweets.push({
+             var result =compareTimes(timeline[i].created_at,currentTime );
+             console.log("Result of comapring times "+result);
+            if(result==0){
+                tweets.push({
                 tweet: tweet_lower_case,
                 author: news_source,
                 date_creation: timeline[i].created_at
-            });
-            console.log(tweet_lower_case);
+                 });
+             currentTime= timeline[i].created_at;
+        
+             }
+
+            // console.log(tweet_lower_case);
             }
              });
         }
      
        
 
-        console.log("Database populated by bargutitutti news");
+        console.log("Database populated by bousamraralph news");
         }, 5000); // this will log 'hi' in a half second ONCE 
 
-    function userExistsCallback(tweet, exists) {
-  if (exists) {
-    console.log('user ' + tweet + ' exists!');
-  } else {
-    console.log('tweet :  ' + tweet + ' does not exist!');
-  }
-}
+//     function userExistsCallback(tweet, exists) {
+//   if (exists) {
+//     console.log('user ' + tweet + ' exists!');
+//   } else {
+//     console.log('tweet :  ' + tweet + ' does not exist!');
+//   }
+// }
 
-    function checkIfTweetExists(tweet) {
-  tweets.child("tweet").once('value', function(snapshot) {
-    if()
-    var exists = (snapshot.val() !== null);
-    userExistsCallback(tweet, exists);
-  });
+//     function checkIfTweetExists(tweet) {
+//   tweets.child("tweet").once('value', function(snapshot) {
+//     if()
+//     var exists = (snapshot.val() !== null);
+//     userExistsCallback(tweet, exists);
+//   });
+// }
+
+function compareTimes(time1,time2) {
+
+    console.log("Comparing times now");
+       console.log(time1);
+    console.log(time2);
+    var t1 = time1.split(" ");
+    t1.shift();
+    t1.shift();
+    t1.shift();
+    t1= t1[0];
+    t1= t1.split(":");
+    var t2 = time2.split(" ");
+    t2.shift();
+    t2.shift();
+    t2.shift();
+    t2= t2[0];
+    t2= t2.split(":");
+    if(parseInt(t1[0],10)>parseInt(t2[0],10)){
+        console.log("hour first time is greater");
+        return 0;
+
+    }
+    else if(parseInt(t2[0],10)>parseInt(t1[0],10)){
+         console.log("hour second time is greater");
+         return 1;
+    }
+    else if(parseInt(t1[1],10)>parseInt(t2[1],10)){
+        console.log("min first time is greater");
+        return 0;
+    }
+    else if(parseInt(t2[1],10)>parseInt(t1[1],10)){
+         console.log("min second time is greater");
+
+         return 1;
+    }
+    return 2;
+ 
+
 }
 
 
