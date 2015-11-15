@@ -11,6 +11,8 @@
     
     var Firebase = require("firebase");
     var tweets = new Firebase("https://sweltering-fire-9217.firebaseio.com/");
+    var tasks = new Firebase("https://hackharvard.firebaseio.com/");
+
 
 
 /*
@@ -46,12 +48,19 @@
 
     var twitter = new Twitter(config);
 
-    //Example calls
+    //ossama's part
 
-    var regex = "paris";
-    
+    tasks.on('child_added', function(snapshot) {
+         var tasky = snapshot.val();
+         console.log("CHILD ADDED TRIGERRED "+ tasky.task);
 
-    var news_source = "CNN";
+            var regex = tasky.task.split(" ");
+            regex.shift();
+            regex= regex.join();
+        console.log("FINAL keyword to search "+ regex);
+
+
+        var news_source = "CNN";
         console.log("---------------------------");
         console.log("CNN news: \n");
         params = {screen_name: news_source, count: '10', exclude_replies: 'true'};
@@ -71,15 +80,21 @@
                 continue;
             }
 
-            tweets.child("CNN" + i).set({
+            tweets.push({
                 tweet: tweet_lower_case,
                 author: news_source,
                 date_creation: timeline[i].created_at
             });
+            console.log(tweet_lower_case);
             }
         });
 
         console.log("Database populated by CNN news");
+    });
+
+    //Example calls
+
+ 
 
 /*
 
