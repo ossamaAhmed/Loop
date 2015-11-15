@@ -50,6 +50,9 @@
 
     //ossama's part
 
+  // do your stuff here
+  
+    var tasksList= [];
     tasks.on('child_added', function(snapshot) {
          var tasky = snapshot.val();
          console.log("CHILD ADDED TRIGERRED "+ tasky.task);
@@ -57,13 +60,14 @@
             var regex = tasky.task.split(" ");
             regex.shift();
             regex= regex.join();
+            tasksList.push(regex);
         console.log("FINAL keyword to search "+ regex);
 
 
-        var news_source = "CNN";
+        var news_source = "bargutitutti";
         console.log("---------------------------");
-        console.log("CNN news: \n");
-        params = {screen_name: news_source, count: '10', exclude_replies: 'true'};
+        console.log("bargutitutti: \n");
+        params = {screen_name: news_source, count: '50', exclude_replies: 'true'};
         twitter.getUserTimeline(params, error, function(timeline){
         timeline = JSON.parse(timeline);
         var number_of_users = 0;
@@ -79,7 +83,10 @@
             if(number_match <= 0){
                 continue;
             }
+            var j=0;
+            for(j=0;j<100000;j++){
 
+            }
             tweets.push({
                 tweet: tweet_lower_case,
                 author: news_source,
@@ -89,10 +96,103 @@
             }
         });
 
-        console.log("Database populated by CNN news");
-    });
+        console.log("Database populated by bargutitutti news");
 
+        //   var news_source = "Reuters";
+        // console.log("---------------------------");
+        // console.log("Reuters news: \n");
+        // params = {screen_name: news_source, count: '50', exclude_replies: 'true'};
+        // twitter.getUserTimeline(params, error, function(timeline){
+        // timeline = JSON.parse(timeline);
+        // var number_of_users = 0;
+        // timeline.forEach(function(entry){
+        //     number_of_users++;
+        // })
+
+        // var i = 0;
+        // for(i = 0; i<number_of_users; i++){
+        //     var tweet_lower_case = timeline[i].text.toLowerCase();
+        //     var number_match = tweet_lower_case.search(regex);
+            
+        //     if(number_match <= 0){
+        //         continue;
+        //     }
+        //     var j=0;
+        //     for(j=0;j<100000;j++){
+
+        //     }
+        //     tweets.push({
+        //         tweet: tweet_lower_case,
+        //         author: news_source,
+        //         date_creation: timeline[i].created_at
+        //     });
+        //     console.log(tweet_lower_case);
+        //     }
+        // });
+
+        // console.log("Database populated by Reuters news");
+    });
     //Example calls
+        setInterval(function(){
+            console.log(tasksList);
+
+        for(k=0;k<tasksList.length;k++){
+            var currentElement= tasksList[k];
+               var news_source = "bargutitutti";
+        console.log("---------------------------");
+        console.log("bargutitutti: \n");
+        params = {screen_name: news_source, count: '50', exclude_replies: 'true'};
+        twitter.getUserTimeline(params, error, function(timeline){
+        timeline = JSON.parse(timeline);
+        var number_of_users = 0;
+        timeline.forEach(function(entry){
+            number_of_users++;
+        })
+
+        var i = 0;
+        for(i = 0; i<number_of_users; i++){
+            var tweet_lower_case = timeline[i].text.toLowerCase();
+            var number_match = tweet_lower_case.search(currentElement);
+            
+            if(number_match <= 0){
+                continue;
+            }
+            var j=0;
+            for(j=0;j<100000;j++){
+
+            }
+            // checkIfTweetExists(tweet_lower_case);
+            tweets.push({
+                tweet: tweet_lower_case,
+                author: news_source,
+                date_creation: timeline[i].created_at
+            });
+            console.log(tweet_lower_case);
+            }
+             });
+        }
+     
+       
+
+        console.log("Database populated by bargutitutti news");
+        }, 5000); // this will log 'hi' in a half second ONCE 
+
+    function userExistsCallback(tweet, exists) {
+  if (exists) {
+    console.log('user ' + tweet + ' exists!');
+  } else {
+    console.log('tweet :  ' + tweet + ' does not exist!');
+  }
+}
+
+    function checkIfTweetExists(tweet) {
+  tweets.child("tweet").once('value', function(snapshot) {
+    if()
+    var exists = (snapshot.val() !== null);
+    userExistsCallback(tweet, exists);
+  });
+}
+
 
  
 
